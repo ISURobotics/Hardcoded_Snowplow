@@ -17,13 +17,13 @@ import matplotlib.pyplot as plt
 #declaring the matrix list for the buffer only one required. x= 0,1,2 ; y= 0,1,.....,8,9,10 (including the extra space for turning)
 ############0,1,2,3,4,5,6,7,8,9,10,#0,1,2,3,4,5,6,7,8,9,10,#0,1,2,3,4,5,6,7,8,9,10###############
 import matplotlib.pyplot as plt
-I_track = [[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]]
+I_track = [[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0]]
 plt.ion()
 plt.imshow(I_track, cmap='gray', interpolation='none')
 plt.pause(0.0001)
 #plt.imshow(I_track, cmap='gray', interpolation='none')
 
-priority  = 'right' # can be preset before each event or on deciding the side to which the snow blade
+priority  = 'left' # can be preset before each event or on deciding the side to which the snow blade
 # is directed
 homing = priority
 main_track = 1
@@ -36,7 +36,7 @@ elif priority is 'right':
     avoidance    = 2
     return_route = 0
 
-I_track[1][11] = 2
+I_track[1][4] = 2
 I_track[0][6] = 2
 #I_track[1][6] = 2
 #plt.imshow(I_track, cmap='gray', interpolation='none')
@@ -60,38 +60,18 @@ z = 0
 while True:
     print (" The current position is ["+str(x) + "," + str(y)+"]")
 
-    #if #objectdected:
-    #    I_track[x][y+1] = '2'
-        # This allows us to notify the buffer that on the list there is an object
-    #Check if the sensor is detecting any obstacle and
-    if I_track[avoidance][11] is 1:
+    if I_track[avoidance][12] is 1:
         print("Avoidance control is being run")
-        I_track[1][10]=3
-        I_track[avoidance][11]=3
+        I_track[main_track][11]=3
+        I_track[avoidance][12]=3
 
-    elif I_track[1][11] is 2 and I_track[1][10] is 1:
+    elif I_track[main_track][12] is 2 and I_track[main_track][11] is 1:
         print("The last node is blocked")
-        I_track[1][10] = 3
+        I_track[main_track][11] = 3
 
-
-
-        #print("Returning to home")
-        #x = return_route
-        ##moving back to base along lower route
-        #while y != 0:
-        #    # to return to base directly
-        #    I_track[x][y] = 1
-        #    print "moving to the position ["+str(x) + "," + str(y)+"]"
-        #    y = y-1
-        #    plt.imshow(I_track, cmap='gray', interpolation='none')
-        #    plt.pause(0.0005)
-        #    time.sleep(0.5)
-            #commands.move(x,y)
-            #move them one step
-
-    elif I_track[1][10] is 0:
+    elif I_track[main_track][11] is 0:
         if I_track[x][y+1] is 0:
-            #checks whether it will detects any obstacle in front and goes onwards
+
             I_track[x][y] = 1
             y=y+1
             print("moving ahead")
@@ -99,23 +79,19 @@ while True:
             plt.pause(0.0001)
             time.sleep(0.5)
             #commands.move(x,y)
-            #proceed to next iteration
+
 
         elif I_track[x][y+1] is 2 :
-            if y is 10:
+            if y is 11:
                 I_track[x][y]= 3
             I_track[x][y] = 1
-            if I_track[1][11] is 2:
-                x = return_route
-            else:
-                x = avoidance
+
+            x = avoidance
             print "the new direction to achieve is ["+str(x) + "," + str(y)+"]"
             plt.imshow(I_track, cmap='gray', interpolation='none')
             plt.pause(0.0001)
             time.sleep(0.5)
-            #commands.move(x,y)
-            #move to the mentioned direction ie. [avoidance,y]
-            #move three blocks
+
             if x is avoidance:
                 z = 0
                 for i in range(2):
@@ -148,33 +124,29 @@ while True:
                         plt.imshow(I_track, cmap='gray', interpolation='none')
                         plt.pause(0.0005)
                         time.sleep(0.5)
-                        #commands.move(x,y)
-                        #run the movement algorithm here
-                        #move two steps in the direction with same [avoidance, y = y+2]
-                I_track[x][y] = 1
+
+                I_track[x][y] = 3
                 plt.imshow(I_track, cmap='gray', interpolation='none')
                 plt.pause(0.0005)
                 x = main_track
                 print "The current position is ["+str(x) + "," + str(y)+"]"
                 time.sleep(0.5)
-                #commands.move(x,y)
-                # move back to the original track route
 
-    elif I_track[1][10] is 2:
+
+    elif I_track[main_track][11] is 2:
         if I_track[x][y+1] is 0:
-            #checks whether it will detects any obstacle in front and goes onwards
+
             I_track[x][y] = 1
             y=y+1
             print("moving ahead")
             plt.imshow(I_track, cmap='gray', interpolation='none')
             plt.pause(0.0001)
             time.sleep(0.5)
-            #commands.move(x,y)
-            #proceed to next iteration
+
 
         elif I_track[x][y+1] is 2:
-            while y != 9:
-                # to return to base directly
+            while y != 10:
+
                 I_track[x][y] = 1
                 print "false moving to the position ["+str(x) + "," + str(y)+"]"
                 y = y+1
@@ -187,9 +159,7 @@ while True:
             plt.imshow(I_track, cmap='gray', interpolation='none')
             plt.pause(0.0001)
             time.sleep(0.5)
-            #commands.move(x,y)
-            #move to the mentioned direction ie. [avoidance,y]
-            #move three blocks
+
             for i in range(2):
                 I_track[x][y] = 3
                 y=y+1
@@ -197,14 +167,13 @@ while True:
                 plt.imshow(I_track, cmap='gray', interpolation='none')
                 plt.pause(0.0005)
                 time.sleep(0.5)
-            I_track[x][y] = 1
+            I_track[x][y] = 3
             plt.imshow(I_track, cmap='gray', interpolation='none')
             plt.pause(0.0005)
             x = main_track
             print "The current position is ["+str(x) + "," + str(y)+"]"
             time.sleep(0.5)
-            #commands.move(x,y)
-            #move them one step
+
 
     else:
         if I_track[return_route][0] is 1:
@@ -213,10 +182,9 @@ while True:
             plt.pause(0.0001)
             time.sleep(0.5)
             print "final moving to the position ["+str(x) + "," + str(y)+"]"
-            #sys.exit()
+
             quit()
-            #commands.move(x,y)
-            #moving to orgin position
+
         else:
             print("Returning to home")
             I_track[x][y] = 1
@@ -224,9 +192,9 @@ while True:
             plt.pause(0.0005)
             time.sleep(0.5)
             x = return_route
-            #moving back to base along lower route
+
             while y != 0:
-                # to return to base directly
+
                 I_track[x][y] = 1
                 plt.imshow(I_track, cmap='gray', interpolation='none')
                 plt.pause(0.0005)
@@ -240,9 +208,7 @@ while True:
                     plt.imshow(I_track, cmap='gray', interpolation='none')
                     plt.pause(0.0001)
                     time.sleep(0.5)
-                    #commands.move(x,y)
-                    #move to the mentioned direction ie. [avoidance,y]
-                    #move three blocks
+
                     if I_track[main_track][y] is 1 or 0:
                         for i in range(2):
                             I_track[x][y] = 3
@@ -252,9 +218,7 @@ while True:
                             plt.imshow(I_track, cmap='gray', interpolation='none')
                             plt.pause(0.0005)
                             time.sleep(.5)
-                            #commands.move(x,y)
-                            #run the movement algorithm here
-                            #move two steps in the direction with same [avoidance, y = y+2]
+
                     else:
                         print("stuck")
                     I_track[x][y] = 3
@@ -277,20 +241,3 @@ while True:
                     I_track[x][y]=1
                     y=y-1
                     print "moving to the position ["+str(x) + "," + str(y)+"]"
-                    #plt.imshow(I_track, cmap='gray', interpolation='none')
-                    #plt.pause(0.0005)
-                    #time.sleep(0.5)
-                    #commands.move(x,y)
-                    #run the movement algorithm here
-                    #move two steps in the direction with same [avoidance, y = y+2]
-                #print "moving to the position ["+str(x) + "," + str(y)+"]"
-                #y = y-1
-                #plt.imshow(I_track, cmap='gray', interpolation='none')
-                #plt.pause(0.0005)
-                #time.sleep(0.5)
-                #commands.move(x,y)
-                #move them one step
-
-
-
-#UDPSock.close()
